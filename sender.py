@@ -1,8 +1,7 @@
 import socket 
-import sys, getopt
+import sys, getopt, time
 import struct
 from datetime import datetime 
-import os.path
 
 packet_format = "!cII"
 output = '''%s \n
@@ -58,6 +57,7 @@ def show_packet(type, addr, seq_num, data):
 
 if __name__ == "__main__":
   port, requester_port, rate, seq_num, length = process_args(sys.argv[1:])
+  avg_sec = 1 / rate 
 
   if port < 2049 or port > 65536:
     raise Exception("port number out of range")
@@ -75,10 +75,14 @@ if __name__ == "__main__":
   filename = data[9:].decode("utf-8")
   with open(filename, 'r') as f:
       while 1:
+        start = time.time()
         data = f.read(length)
         if not data:
           break
         send_data(sock, requester_addr, seq_num = seq_num, data = data)
+        end = time.time()
+        if end - start < avg_sec:
+          time.sleep(avg_sec - (end - start))
         seq_num += len(data)
   send_end(sock, requester_addr, seq_num)
   sock.close()
