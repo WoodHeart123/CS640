@@ -2,14 +2,9 @@ import socket
 import sys, getopt, time
 import struct
 from datetime import datetime 
+import os.path
 
 packet_format = "!cII"
-output = '''%s \n
-  send time:  %s \n
-requester addr: %s:%s \n
-sequence:  %i \n
-length:    %i \n
-payload:  %s''' 
 
 def pack_packet_header(type, seq_num, length):
   return struct.pack(packet_format, type, socket.htonl(seq_num), socket.htonl(length))
@@ -48,11 +43,11 @@ def send_end(sock, addr, seq_num):
 
 def show_packet(type, addr, seq_num, data):
   print(type)
-  print("send time:", datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f'))
+  print("send time:", datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3])
   print("requester address: %s:%s"%(addr[0],addr[1]))
   print("sequence:",seq_num)
   print("length:",len(data))
-  print("data:", data)
+  print("payload:", data)
   print()
 
 if __name__ == "__main__":
@@ -70,19 +65,19 @@ if __name__ == "__main__":
   data, addr = sock.recvfrom(10000)
   requester_addr = (addr[0], requester_port)
   packet_type, packet_sequence, packet_length  = unpack_packet_header(data[0:9])
-  print(packet_type)
 
   filename = data[9:].decode("utf-8")
-  with open(filename, 'r') as f:
-      while 1:
-        start = time.time()
-        data = f.read(length)
-        if not data:
-          break
-        send_data(sock, requester_addr, seq_num = seq_num, data = data)
-        end = time.time()
-        if end - start < avg_sec:
-          time.sleep(avg_sec - (end - start))
-        seq_num += len(data)
+  if os.path.exists(filename):
+    with open(filename, 'r') as f:
+        while 1:
+          start = time.time()
+          data = f.read(length)
+          if not data:
+            break
+          send_data(sock, requester_addr, seq_num = seq_num, data = data)
+          end = time.time()
+          if end - start < avg_sec:
+            time.sleep(avg_sec - (end - start))
+          seq_num += len(data)
   send_end(sock, requester_addr, seq_num)
   sock.close()
