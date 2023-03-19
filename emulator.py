@@ -15,7 +15,7 @@ routing_table = {}
 
 
 class RoutingEntry:
-    def __init__(self, next_ip, next_port, last_sent_time, delay, loss):
+    def __init__(self, next_ip:str, next_port:int, last_sent_time:int, delay:int, loss:int):
         self.next_ip = next_ip
         self.next_port = next_port
         self.delay = delay
@@ -23,7 +23,7 @@ class RoutingEntry:
         self.loss = loss
 
     # if channel is ready
-    def is_ready(self):
+    def is_ready(self) -> bool:
         return self.last_sent_time == -1 or time.time() * 1000 - self.last_sent_time >= self.delay
 
     def drop(self) -> bool:
@@ -45,7 +45,7 @@ def process_args(args):
     return port, queue_size, filename, log
 
 
-def log_loss(logger: logging.Logger, packet: Packet, reason):
+def log_loss(logger: logging.Logger, packet: Packet, reason:str):
     logger.error(
         "[%s][%s -> %s][payload size = %i][priority = %i] %s" % (datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f'),
                                                                  packet.get_source_addr_str(),

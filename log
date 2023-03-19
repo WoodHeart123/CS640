@@ -1,0 +1,28 @@
+ERROR:root:[2023-03-19 00:33:28.467106][192.168.56.1:61790 -> 192.168.56.1:5000][payload size = 10][priority = 1] packet lost to simulate lossy channel
+ERROR:root:[2023-03-19 00:33:28.467106][192.168.56.1:61790 -> 192.168.56.1:5001][payload size = 10][priority = 1] packet lost to simulate lossy channel
+ERROR:root:[2023-03-19 00:34:11.439823][192.168.56.1:62261 -> 192.168.56.1:5000][payload size = 10][priority = 1] packet lost to simulate lossy channel
+ERROR:root:[2023-03-19 00:34:11.439823][192.168.56.1:62261 -> 192.168.56.1:5001][payload size = 10][priority = 1] packet lost to simulate lossy channel
+ERROR:root:[2023-03-19 00:34:42.374317][192.168.56.1:59612 -> 192.168.56.1:5000][payload size = 10][priority = 1] packet lost to simulate lossy channel
+ERROR:root:[2023-03-19 00:34:42.376317][192.168.56.1:59612 -> 192.168.56.1:5001][payload size = 10][priority = 1] packet lost to simulate lossy channel
+ERROR:root:[2023-03-19 01:47:01.125783][192.168.56.1:56270 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:01.126790][192.168.56.1:56270 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:01.126790][192.168.56.1:56270 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:01.126790][192.168.56.1:56270 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:01.127790][192.168.56.1:56270 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:01.127790][192.168.56.1:56270 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:01.127790][192.168.56.1:56270 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:01.127790][192.168.56.1:56270 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:57.920490][192.168.56.1:52078 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:57.920490][192.168.56.1:52078 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:57.920490][192.168.56.1:52078 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:57.921489][192.168.56.1:52078 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:57.921489][192.168.56.1:52078 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:57.921489][192.168.56.1:52078 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:57.921489][192.168.56.1:52078 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:47:57.922492][192.168.56.1:52078 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:48:31.449457][192.168.56.1:51851 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:48:31.449457][192.168.56.1:51851 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:48:31.449457][192.168.56.1:51851 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:48:31.449457][192.168.56.1:51851 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:48:31.450457][192.168.56.1:51851 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
+ERROR:root:[2023-03-19 01:48:31.450457][192.168.56.1:51851 -> 192.168.56.1:54559][payload size = 0][priority = 1] not entry in routing table
