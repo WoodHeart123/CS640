@@ -74,6 +74,7 @@ if __name__ == "__main__":
                 routing_table[socket.gethostbyname(cols[2]) + ":" + cols[3]] = RoutingEntry(
                     socket.gethostbyname(cols[4]), int(cols[5]), -1, int(cols[6]), int(cols[7]))
 
+    print(routing_table)
     # start receiving packet
     while 1:
         try:

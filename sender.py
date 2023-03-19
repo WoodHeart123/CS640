@@ -36,19 +36,22 @@ def process_args(args):
     return port, requester_port, rate, length, f_ip, f_port, priority, timeout
 
 
-def send_data(sock, requester_ip, requester_port, seq_num, data):
-    inner_packet = Packet.pack_inner_packet_header('D'.encode("utf-8"), seq_num, len(data)) + data.encode("utf-8")
-    return send_packet(sock, requester_ip, requester_port, inner_packet)
+def send_data(sock, dest_ip, dest_port, seq_num, data):
+    inner_packet = Packet.pack_inner_packet_header('D'.encode("utf-8"), seq_num, len(data))
+    if type(data) == str:
+        data = data.encode("UTF-8")
+    inner_packet += data
+    return send_packet(sock, dest_ip, dest_port, inner_packet)
 
 
-def send_end(sock, requester_ip, requester_port, seq_num):
+def send_end(sock, dest_ip, dest_port, seq_num):
     inner_packet = Packet.pack_inner_packet_header('E'.encode("utf-8"), seq_num, 0)
-    send_packet(sock, requester_ip, requester_port, inner_packet)
+    send_packet(sock, dest_ip, dest_port, inner_packet)
 
 
-def send_packet(sock: socket.socket, dest_IP, dest_port, inner_packet):
+def send_packet(sock: socket.socket, dest_ip, dest_port, inner_packet):
     packet = Packet.pack_outer_packet_header(1, socket.inet_aton(socket.gethostbyname(socket.gethostname())),
-                                             sock.getsockname()[1], socket.inet_aton(dest_IP),
+                                             sock.getsockname()[1], socket.inet_aton(dest_ip),
                                              dest_port, window_size) + inner_packet
     sock.sendto(packet, (f_ip, f_port))
     return packet
@@ -84,7 +87,6 @@ if __name__ == "__main__":
     window_size = req_packet.payload_length
     # set the socket in for non-blocking to get ack packet
     sock.setblocking(False)
-    print(sock.getsockname())
     # check file exist
     filename = req_packet.payload.decode("utf-8")
     if not os.path.exists(filename):
@@ -115,24 +117,25 @@ if __name__ == "__main__":
                 if time.time() * 1000 - last_sent_time < avg_ms:
                     break
                 if time.time() * 1000 > timeout + buffer[i][1]:
-                    send_data(sock, requester_ip, requester_port, seq_num=buffer[i][0].seq_num,
+                    send_data(sock, dest_ip=requester_ip, dest_port=requester_port, seq_num=buffer[i][0].seq_num,
                               data=buffer[i][0].payload)
                     buffer[i][1] = time.time() * 1000
                     buffer[i][2] += 1
                 if buffer[i][2] == 5:
                     buffer.pop(i)
                     print("max try exceeded")
+                    break
             # check if we can send packet
             if len(buffer) < window_size:
                 data = f.read(length)
                 if not data:
                     break
-                packet_data = send_data(sock, requester_ip, requester_port, seq_num=seq_num, data=data)
+                packet_data = send_data(sock, dest_ip=requester_ip, dest_port=requester_port, seq_num=seq_num, data=data)
                 buffer.append([Packet(packet_data), time.time() * 1000, 1])
                 end = time.time()
                 if time.time() * 1000 - last_sent_time < avg_ms:
                     continue
-                seq_num += len(data)
+                seq_num += 1
     send_end(sock, requester_ip, requester_port, seq_num)
     f.close()
     sock.close()

@@ -105,7 +105,7 @@ if __name__ == "__main__":
             end_count += 1
         else:
             ID2Data_dict[Addr2ID_dict[packet.source_ip + ":" + str(packet.source_port)]].append([packet.seq_num, packet.payload.decode("utf-8")])
-        send_ack(sock_out, addr[0], addr[1], packet.seq_num)
+        send_ack(sock_out, packet.source_ip, packet.source_port, packet.seq_num)
 
     with open(filename, "w+") as f:
         for i in range(1, end_num + 1):
