@@ -1,2 +1,2 @@
-file.txt 1 DESKTOP-0N2GE0T 5000
-file.txt 2 LAPTOP-H9PHLGFQ 5000
+file.txt 1 senderA 5000
+file.txt 2 senderB 5000

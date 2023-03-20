@@ -11,6 +11,7 @@ INNER_PACKET_LENGTH = 9
 OUTER_PACKET_FORMAT = "!B4sH4sHI"
 OUTER_PACKET_LENGTH = 17
 f_ip, f_port = "", 0
+priority = 1
 
 
 def process_args(args):
@@ -50,7 +51,7 @@ def send_end(sock, dest_ip, dest_port, seq_num):
 
 
 def send_packet(sock: socket.socket, dest_ip, dest_port, inner_packet):
-    packet = Packet.pack_outer_packet_header(1, socket.inet_aton(socket.gethostbyname(socket.gethostname())),
+    packet = Packet.pack_outer_packet_header(priority, socket.inet_aton(socket.gethostbyname(socket.gethostname())),
                                              sock.getsockname()[1], socket.inet_aton(dest_ip),
                                              dest_port, window_size) + inner_packet
     sock.sendto(packet, (f_ip, f_port))
@@ -83,7 +84,7 @@ if __name__ == "__main__":
     # waiting for request packet
     data, addr = sock.recvfrom(10000)
     req_packet = Packet(data)
-    requester_ip = addr[0]
+    requester_ip = req_packet.source_ip
     window_size = req_packet.payload_length
     # set the socket in for non-blocking to get ack packet
     sock.setblocking(False)
@@ -93,6 +94,7 @@ if __name__ == "__main__":
         print("file does not exist")
         exit()
     f = open(filename, 'r')
+    print(os.path.getsize(filename))
     # multiple entry of [Packet, last_sent_time, sent count]
     buffer = []
     last_sent_time = 0
@@ -110,15 +112,19 @@ if __name__ == "__main__":
                     break
         except BlockingIOError as e:
             pass
+        except Exception as e:
+            print(e)
         finally:
+            # should not send packet to follow rate parameter
+            if time.time() * 1000 - last_sent_time < avg_ms:
+                continue
             # resend timeout packet
             for i in range(len(buffer)):
-                # should not send packet to follow rate parameter
-                if time.time() * 1000 - last_sent_time < avg_ms:
-                    break
                 if time.time() * 1000 > timeout + buffer[i][1]:
+                    print(requester_ip, requester_port)
                     send_data(sock, dest_ip=requester_ip, dest_port=requester_port, seq_num=buffer[i][0].seq_num,
                               data=buffer[i][0].payload)
+                    last_sent_time = time.time() * 1000
                     buffer[i][1] = time.time() * 1000
                     buffer[i][2] += 1
                 if buffer[i][2] == 5:
@@ -130,12 +136,12 @@ if __name__ == "__main__":
                 data = f.read(length)
                 if not data:
                     break
-                packet_data = send_data(sock, dest_ip=requester_ip, dest_port=requester_port, seq_num=seq_num, data=data)
-                buffer.append([Packet(packet_data), time.time() * 1000, 1])
-                end = time.time()
-                if time.time() * 1000 - last_sent_time < avg_ms:
-                    continue
-                seq_num += 1
+                if time.time() * 1000 - last_sent_time > avg_ms:
+                    print(requester_ip, requester_port)
+                    packet_data = send_data(sock, dest_ip=requester_ip, dest_port=requester_port, seq_num=seq_num, data=data)
+                    buffer.append([Packet(packet_data), time.time() * 1000, 1])
+                    last_sent_time = time.time() * 1000
+                    seq_num += 1
     send_end(sock, requester_ip, requester_port, seq_num)
     f.close()
     sock.close()

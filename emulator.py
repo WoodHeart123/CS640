@@ -55,6 +55,7 @@ def log_loss(logger: logging.Logger, packet: Packet, reason:str):
 
 if __name__ == "__main__":
     port, queue_size, filename, log = process_args(sys.argv[1:])
+    print(port, queue_size, filename, log)
     queue = [[], [], [], []]  # leave index 0
     # socket listen for packet
     sock_in = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
@@ -70,11 +71,13 @@ if __name__ == "__main__":
     with open(filename, "r") as f:
         for row in f.readlines():
             cols = row.strip("\n").split(" ")
+            print(cols)
+            print(socket.gethostbyname(cols[0]), socket.gethostbyname(socket.gethostname()),socket.gethostbyname(cols[0]) == socket.gethostbyname(socket.gethostname()))
             if socket.gethostbyname(cols[0]) == socket.gethostbyname(socket.gethostname()) and int(cols[1]) == port:
                 routing_table[socket.gethostbyname(cols[2]) + ":" + cols[3]] = RoutingEntry(
                     socket.gethostbyname(cols[4]), int(cols[5]), -1, int(cols[6]), int(cols[7]))
 
-    print(routing_table)
+    print(routing_table, len(routing_table))
     # start receiving packet
     while 1:
         try:

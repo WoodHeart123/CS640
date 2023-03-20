@@ -1,0 +1,53 @@
+services:
+    emulatorA:
+      image: cs640-image
+      container_name: emulatorA
+      hostname: emulatorA
+      volumes:
+      - "./emulator:/home/cs640/logs"
+      - "./emulator.sh:/home/cs640/start.sh"
+      - "./emulator.py:/home/cs640/emulator.py"
+
+    emulatorB:
+      image: cs640-image
+      container_name: emulatorB
+      hostname: emulatorB
+      volumes:
+      - "./emulator:/home/cs640/logs"
+      - "./emulator.sh:/home/cs640/start.sh"
+      - "./emulator.py:/home/cs640/emulator.py"
+
+    requester:
+      image: cs640-image
+      container_name: requester
+      hostname: requester
+      volumes:
+      - "./requester.sh:/home/cs640/start.sh"
+      - "./requester.py:/home/cs640/requester.py"
+      depends_on:
+      - emulatorA
+      - emulatorB
+      - senderA
+      - senderB
+
+    senderA:
+      image: cs640-image
+      container_name: senderA
+      hostname: senderA
+      volumes:
+      - "./sender-1.sh:/home/cs640/start.sh"
+      - "./sender.py:/home/cs640/sender.py"
+      depends_on:
+      - emulatorA
+      - emulatorB
+
+    senderB:
+      image: cs640-image
+      container_name: senderB
+      hostname: senderB
+      volumes:
+      - "./sender-2.sh:/home/cs640/start.sh"
+      - "./sender.py:/home/cs640/sender.py"
+      depends_on:
+      - emulatorA
+      - emulatorB

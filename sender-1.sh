@@ -1,0 +1,1 @@
+python3 sender.py -p 5000 -g 4000 -r 4  -l 5 -f emulatorA -e 9999 -i 2 -t 1000

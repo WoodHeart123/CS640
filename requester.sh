@@ -1,0 +1,1 @@
+python3 requester.py -p 4000 -f emulatorA -e 9999 -o file.txt -w 10
